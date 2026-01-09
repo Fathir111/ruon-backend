@@ -41,7 +41,7 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
       "moduleResolution": "Node",
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "esModuleInterop": true,
   }

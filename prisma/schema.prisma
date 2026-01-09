@@ -1,0 +1,48 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Merchant {
+  id            String    @id @default(uuid())
+  walletAddress String    @unique @map("wallet_address")
+  name          String
+  createdAt     DateTime  @default(now()) @map("created_at")
+
+  products Product[]
+  orders   Order[]
+
+  @@map("merchants")
+}
+
+model Product {
+  id         String   @id @default(uuid())
+  merchantId String   @map("merchant_id")
+  name       String
+  price      BigInt
+  imageUrl   String?  @map("image_url")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+
+  @@map("products")
+}
+
+model Order {
+  id           String   @id @default(uuid())
+  merchantId   String   @map("merchant_id")
+  orderId      String   @unique @map("order_id")
+  amount       BigInt
+  status       String   @default("PENDING")
+  payerAddress String?  @map("payer_address")
+  txHash       String?  @map("tx_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  paidAt       DateTime? @map("paid_at")
+
+  merchant Merchant @relation(fields: [merchantId], references: [id])
+
+  @@map("orders")
+}
