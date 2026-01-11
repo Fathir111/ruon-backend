@@ -1,13 +1,12 @@
-import express from 'express';
-import cors from 'cors';
+import express from "express";
+import cors from "cors";
+import merchantRoutes from "./routes/merchant.routes";
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
-app.get('/health', (_req, res) => {
-  res.json({ status: 'OK', service: 'RUON Backend' });
-});
+app.use("/api/merchants", merchantRoutes);
 
 export default app;
