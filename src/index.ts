@@ -10,9 +10,11 @@ dotenv.config();
 
 const PORT = process.env.PORT || 3001;
 
-const server = http.createServer(app);
-initSocket(server);
-
-server.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`🚀 RUON Backend running on port ${PORT}`);
 });
+
+initSocket(server);
+
+
+
