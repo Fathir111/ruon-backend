@@ -1,6 +1,6 @@
 import { Server } from "socket.io";
-
-let io: Server;
+import http from "http";
+export let io: Server;
 
 export function initSocket(server: any) {
   io = new Server(server, {
@@ -8,6 +8,7 @@ export function initSocket(server: any) {
       origin: process.env.CORS_ORIGIN,
     },
   });
+  
 
   io.on("connection", (socket) => {
     socket.on("join", ({ merchantId }) => {
