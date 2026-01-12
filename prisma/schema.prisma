@@ -33,17 +33,15 @@ model Product {
 }
 
 model Order {
-  id           String   @id @default(uuid())
-  merchantId   String   @map("merchant_id")
-  orderId      String   @unique @map("order_id")
-  amount       BigInt
-  status       String   @default("PENDING")
-  payerAddress String?  @map("payer_address")
-  txHash       String?  @map("tx_hash")
-  createdAt    DateTime @default(now()) @map("created_at")
-  paidAt       DateTime? @map("paid_at")
+  id            String   @id @default(uuid())
+  merchantId    String
+  orderId       String   @unique
+  amount        BigInt
+  status        String   @default("PENDING")
+  payerAddress  String?
+  txHash        String?
+  createdAt     DateTime @default(now())
+  paidAt        DateTime?
 
   merchant Merchant @relation(fields: [merchantId], references: [id])
-
-  @@map("orders")
 }
