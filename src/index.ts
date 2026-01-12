@@ -2,7 +2,9 @@ import http from 'http';
 import dotenv from 'dotenv';
 import app from './app';
 import { initSocket } from './socket';
+import orderRoutes from "./routes/order.routes";
 
+app.use("/api/orders", orderRoutes);
 
 dotenv.config();
 

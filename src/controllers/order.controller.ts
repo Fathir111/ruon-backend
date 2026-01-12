@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { prisma } from "../prisma";
 import crypto from "crypto";
 
+/**
+ * POST /api/orders
+ */
 export async function createOrder(req: Request, res: Response) {
   const { merchantId, amount } = req.body;
 
@@ -9,12 +12,11 @@ export async function createOrder(req: Request, res: Response) {
     return res.status(400).json({ error: "merchantId & amount required" });
   }
 
-  // 🔥 PENTING: convert string → BigInt
   let amountBigInt: bigint;
   try {
     amountBigInt = BigInt(amount);
   } catch {
-    return res.status(400).json({ error: "amount must be a bigint string" });
+    return res.status(400).json({ error: "amount must be bigint string" });
   }
 
   const merchant = await prisma.merchant.findUnique({
@@ -31,14 +33,14 @@ export async function createOrder(req: Request, res: Response) {
     data: {
       merchantId: merchant.id,
       orderId,
-      amount: amountBigInt, // ✅ BIGINT ASLI
+      amount: amountBigInt,
       status: "PENDING",
     },
   });
 
   res.json({
     orderId: order.orderId,
-    amount: order.amount.toString(), // ⚠️ BigInt → string utk frontend
+    amount: order.amount.toString(),
     merchantAddress: merchant.walletAddress,
     merchantName: merchant.name,
     qrData: `ethereum:${merchant.walletAddress}@11155111/pay?amount=${order.amount.toString()}&orderId=${order.orderId}`,
@@ -46,6 +48,10 @@ export async function createOrder(req: Request, res: Response) {
   });
 }
 
+/**
+ * GET /api/orders/:orderId
+ * (Polling)
+ */
 export async function getOrderStatus(req: Request, res: Response) {
   const { orderId } = req.params;
 
